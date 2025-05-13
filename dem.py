@@ -5,15 +5,14 @@ from rasterio.enums import Resampling
 from scipy.ndimage import sobel
 import json
 
-# === INPUT FILENAMES (update if needed) ===
-dem_file = "dem.TIF"  # Your DEM file
+dem_file = "dem.TIF"
 band3_file = "SR_B3.TIF"  # Green
 band4_file = "SR_B4.TIF"  # Red
 band5_file = "SR_B5.TIF"  # NIR
 output_file = "terrain_data.jsonl"  # Output file
 
 
-# === Compute slope and aspect from DEM ===
+#Compute slope and aspect from DEM
 def compute_slope_aspect(dem_array):
     dx = sobel(dem_array, axis=1, mode='constant') / 8.0
     dy = sobel(dem_array, axis=0, mode='constant')
@@ -24,7 +23,7 @@ def compute_slope_aspect(dem_array):
     return slope, aspect
 
 
-# === Load DEM and calculate slope & aspect ===
+#Load DEM and calculate slope & aspect
 with rasterio.open(dem_file) as dem_src:
     dem = dem_src.read(1, resampling=Resampling.bilinear)
     transform = dem_src.transform
@@ -32,7 +31,7 @@ with rasterio.open(dem_file) as dem_src:
     dem = np.where(dem == nodata, np.nan, dem)
     slope, aspect = compute_slope_aspect(dem)
 
-# === Load Landsat Surface Reflectance bands ===
+#Load Landsat Surface Reflectance bands
 with rasterio.open(band3_file) as b3, \
         rasterio.open(band4_file) as b4, \
         rasterio.open(band5_file) as b5:
@@ -40,12 +39,12 @@ with rasterio.open(band3_file) as b3, \
     red = b4.read(1).astype("float32")
     nir = b5.read(1).astype("float32")
 
-# === Calculate NDVI and NDWI ===
+#Calculate NDVI and NDWI
 np.seterr(divide='ignore', invalid='ignore')
 ndvi = (nir - red) / (nir + red)
 ndwi = (green - nir) / (green + nir)
 
-# === Export data to JSONL ===
+#Export data to JSONL
 step = 10  # controls sampling density
 
 with open(output_file, "w") as f:
