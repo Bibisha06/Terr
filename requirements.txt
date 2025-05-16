@@ -1,0 +1,8 @@
+numpy
+pandas
+matplotlib
+scipy
+networkx
+rasterio
+scikit-learn
+folium

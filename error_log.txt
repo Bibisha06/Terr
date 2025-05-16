@@ -1,0 +1,12 @@
+Error type: NameError
+Error message: name 'time' is not defined
+
+Full traceback:
+Traceback (most recent call last):
+  File "C:\Users\bibis\OneDrive\Desktop\terr\scripts\map_interactive_folium.py", line 233, in <module>
+    main()
+    ^^^^^^
+  File "C:\Users\bibis\OneDrive\Desktop\terr\scripts\map_interactive_folium.py", line 221, in main
+    time.sleep(2)
+    ^^^^
+NameError: name 'time' is not defined
